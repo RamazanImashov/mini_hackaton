@@ -1,0 +1,146 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CRUD</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="/home/aidin/Downloads/images.jpeg">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .input-container {
+      margin-bottom: 20px;
+    }
+
+    .input-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .button-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button1 {
+      background-color: #4CAF50;
+    }
+
+    .button2 {
+      background-color: #2196F3;
+    }
+
+    .button3 {
+      background-color: #fdd835;
+    }
+
+    .button4 {
+      background-color: #f44336;
+    }
+
+    .button:hover {
+      background-color: #555;
+    }
+
+    .language-toggle {
+      margin-top: 20px;
+      background-color: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .language-toggle:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body> 
+
+  <div class="container">
+    <div class="input-container">
+      <label for="input1">Products</label>
+      <form method="POST" action="/">
+        <input type="text" id="input1" name="product_id" placeholder="Введите Id и название товара через запятую!">
+        <input type="submit" value="Добавить">
+      </form>
+
+      <div class="button-container">
+        <button class="button button3">Обновить</button>
+        <button class="button button4">Удалить</button>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button class="button button2">Список</button>
+    </div>
+
+    <button class="language-toggle" onclick="toggleLanguage()">Переключить язык</button>
+  </div>
+
+  <script src="lala.js"></script>
+    <script>
+        let language = "русский"; // Начальный язык (можно изменить на "английский" или другой язык по умолчанию)
+
+        function toggleLanguage() {
+        if (language === "русский") {
+            language = "английский";
+        } else {
+            language = "русский";
+        }
+        updateButtonLabels();
+        }
+
+        function updateButtonLabels() {
+        const translations = {
+            "русский": ["Добавить", "Список", "Обновить", "Удалить"],
+            "английский": ["Create", "Read", "Update", "Delete"]
+        };
+        
+        const buttons = document.querySelectorAll(".button");
+        buttons.forEach((button, index) => {
+            button.textContent = translations[language][index];
+        });
+        }
+    </script>
+</body>
+</html>
+

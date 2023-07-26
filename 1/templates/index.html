@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD Web App</title>
+</head>
+<body>
+    <h1>CRUD Web App</h1>
+    <button onclick="createRecord()">Create</button>
+    <button onclick="readRecords()">Read</button>
+    <button onclick="updateRecord()">Update</button>
+    <button onclick="deleteRecord()">Delete</button>
+
+    <div id="createForm" style="display: none;">
+        <h2>Create a New Record</h2>
+        <label for="recordId">ID:</label>
+        <input type="number" id="recordId" name="recordId">
+        <br>
+        <label for="recordName">Name:</label>
+        <input type="text" id="recordName" name="recordName">
+        <br>
+        <button onclick="submitCreate()">Submit</button>
+    </div>
+
+    <div id="readResults" style="display: none;">
+        <h2>Records List</h2>
+        <ul id="recordsList"></ul>
+    </div>
+
+    <div id="updateForm" style="display: none;">
+        <h2>Update Record</h2>
+        <label for="updateId">ID:</label>
+        <input type="number" id="updateId" name="updateId">
+        <br>
+        <label for="newName">New Name:</label>
+        <input type="text" id="newName" name="newName">
+        <br>
+        <button onclick="submitUpdate()">Submit</button>
+    </div>
+
+    <div id="deleteForm" style="display: none;">
+        <h2>Delete Record</h2>
+        <label for="deleteId">ID:</label>
+        <input type="number" id="deleteId" name="deleteId">
+        <br>
+        <button onclick="submitDelete()">Submit</button>
+    </div>
+
+    <script>
+        function createRecord() {
+            document.getElementById('createForm').style.display = 'block';
+            document.getElementById('readResults').style.display = 'none';
+            document.getElementById('updateForm').style.display = 'none';
+            document.getElementById('deleteForm').style.display = 'none';
+        }
+
+        function readRecords() {
+            document.getElementById('createForm').style.display = 'none';
+            document.getElementById('readResults').style.display = 'block';
+            document.getElementById('updateForm').style.display = 'none';
+            document.getElementById('deleteForm').style.display = 'none';
+
+            fetch('.../main.py')
+                .then(response => data.json())
+                .then(data => {
+                    const recordsList = document.getElementById('recordsList');
+                    recordsList.innerHTML = '';
+                    data.forEach(record => {
+                        const li = document.createElement('li');
+                        li.textContent = `ID: ${record.id}, Name: ${record.name}`;
+                        recordsList.appendChild(li);
+                    });
+                });
+        }
+
+        function updateRecord() {
+            document.getElementById('createForm').style.display = 'none';
+            document.getElementById('readResults').style.display = 'none';
+            document.getElementById('updateForm').style.display = 'block';
+            document.getElementById('deleteForm').style.display = 'none';
+        }
+
+        function deleteRecord() {
+            document.getElementById('createForm').style.display = 'none';
+            document.getElementById('readResults').style.display = 'none';
+            document.getElementById('updateForm').style.display = 'none';
+            document.getElementById('deleteForm').style.display = 'block';
+        }
+
+        function submitCreate() {
+            const recordId = document.getElementById('recordId').value;
+            const recordName = document.getElementById('recordName').value;
+            fetch(`/create_record?id=${recordId}&name=${recordName}`)
+                .then(() => alert('Record created successfully.'))
+                .catch(error => alert('Error creating record: ' + error));
+        }
+
+        function submitUpdate() {
+            const updateId = document.getElementById('updateId').value;
+            const newName = document.getElementById('newName').value;
+            fetch(`/update_record?id=${updateId}&name=${newName}`)
+                .then(() => alert('Record updated successfully.'))
+                .catch(error => alert('Error updating record: ' + error));
+        }
+
+        function submitDelete() {
+            const deleteId = document.getElementById('deleteId').value;
+            fetch(`/delete_record?id=${deleteId}`)
+                .then(() => alert('Record deleted successfully.'))
+                .catch(error => alert('Error deleting record: ' + error));
+        }
+    </script>
+</body>
+</html>
