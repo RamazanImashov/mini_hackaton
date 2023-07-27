@@ -1,10 +1,12 @@
 import json
 
 class Database:
+    # Инициализирует файл для записи и прочитки
     def __init__(self, filename):
         self.filename = filename
         self.prod_name = self._load_data()
-
+        
+    # открыте, прочитка и подготова к записи
     def _load_data(self):
         try:
             with open(self.filename, 'r') as file:
@@ -12,14 +14,17 @@ class Database:
         except FileNotFoundError:
             return []
 
+    # запись
     def _save_data(self):
         with open(self.filename, 'w') as file:
             json.dump(self.prod_name, file, indent=2)
             
+    # дабавление
     def create(self, product):
         self.prod_name.append(product)
         self._save_data()
 
+    # прочитка
     def read(self, product_id=None):
         if product_id is None:
             return self.prod_name
@@ -28,6 +33,7 @@ class Database:
                 return product
         return None
 
+    # обновление
     def update(self, product_id, new_name):
         for product in self.prod_name:
             if product['id'] == product_id:
@@ -36,6 +42,7 @@ class Database:
                 return True
         return False
 
+    # удаление
     def delete(self, product_id):
         for index, product in enumerate(self.prod_name):
             if product['id'] == product_id:
@@ -44,7 +51,7 @@ class Database:
                 return True
         return False
 
-
+# Инициализация объекта модели.
 class Model:
     def __init__(self, data):
         self.prod_name = data
@@ -52,6 +59,7 @@ class Model:
     def validate(self):
         return True
 
+# Методы для отображения информации пользователю, например, печать списка записей или простых сообщений.
 class View:
     @staticmethod
     def print_products(products):
@@ -62,40 +70,46 @@ class View:
     def print_message(message):
         print(message)
 
+# выполнение всех данных
 class Controller:
+    # инициализация данных
     def __init__(self, db):
         self.db = db
-
+        
+    # запись
     def create_product(self, name):
         model = Model(name)
         if model.validate():
             self.db.create(name)
-            View.print_message("Запись успешно создана.")
+            return print("Запись успешно создана.")
         else:
-            View.print_message("Ошибка валидации данных. Запись не создана.")
+            return print("Ошибка валидации данных. Запись не создана.")
         
+    # показ всех данных
     def read_products(self, product_id=None):
         if product_id is not None:
             product = self.db.read(product_id)
             if product:
-                View.print_products([product])
+                return print([product])
             else:
-                View.print_message("Запись не найдена.")
+                return print("Запись не найдена.")
         else:
             products = self.db.read()
-            View.print_products(products)
+            return print(products)
 
+    # изменение данных
     def update_product(self, product_id, new_name):
         if self.db.update(product_id, new_name):
-            View.print_message("Запись успешно обновлена.")
+            return print("Запись успешно обновлена.")
         else:
-            View.print_message("Запись не найдена. Обновление не выполнено.")
+            return print("Запись не найдена. Обновление не выполнено.")
 
+    # удаление данных
     def delete_product(self, product_id):
         if self.db.delete(product_id):
-            View.print_message("Запись успешно удалена.")
+            return print("Запись успешно удалена.")
         else:
-            View.print_message("Запись не найдена. Удаление не выполнено.")
+            return print("Запись не найдена. Удаление не выполнено.")
 
 db = Database("data.json")
 controller = Controller(db)
